@@ -12,6 +12,14 @@ CORRECT: update(original, field, value) → returns new copy with change
 
 Rationale: Immutable data prevents hidden side effects, makes debugging easier, and enables safe concurrency.
 
+## Code readability
+
+ALWAYS respect the following rules when writing code:
+- never use emojis in code, comment or documentation
+- useful comments to explain meanings, not "NEW" or "FIX"
+
+
+
 ## File Organization
 
 MANY SMALL FILES > FEW LARGE FILES:

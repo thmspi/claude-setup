@@ -148,33 +148,7 @@ Run simultaneously:
 Combine outputs into single report
 ```
 
-For external tmux-pane workers with separate git worktrees, use `node .claude/scripts/orchestrate-worktrees.js .claude/plans/<workflow>-plan.json --execute`. The built-in orchestration pattern stays in-process; the helper is for long-running or cross-harness sessions.
-
-The `.claude/plans/<workflow>-plan.json` file should be derived from your approved `/plan` output.
-
-When workers need to see dirty or untracked local files from the main checkout, add `seedPaths` to the plan file. The orchestrator overlays only those selected paths into each worker worktree after `git worktree add`, which keeps the branch isolated while still exposing in-flight local scripts, plans, or docs.
-
-```json
-{
-  "sessionName": "workflow-e2e",
-  "seedPaths": [
-      ".claude/scripts/orchestrate-worktrees.js",
-      ".claude/scripts/lib/tmux-worktree-orchestrator.js",
-      ".claude/plans/workflow-e2e-plan.json"
-  ],
-  "workers": [
-    { "name": "docs", "task": "Update orchestration docs." }
-  ]
-}
-```
-
-To export a control-plane snapshot for a live tmux/worktree session, run:
-
-```bash
-node .claude/scripts/orchestration-status.js .claude/plans/workflow-e2e-plan.json
-```
-
-The snapshot includes session activity, tmux pane metadata, worker states, objectives, seeded overlays, and recent handoff summaries in JSON form.
+If you need external tmux/worktree orchestration, add your own helper scripts under `.claude/scripts/` and reference them from your local runbook. This setup only documents the in-process agent orchestration flow and does not bundle external orchestration helpers.
 
 ## Operator Command-Center Handoff
 

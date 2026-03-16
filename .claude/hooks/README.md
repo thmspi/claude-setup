@@ -14,29 +14,20 @@ User request → Claude picks a tool → PreToolUse hook runs → Tool executes 
 - **SessionStart/SessionEnd** hooks run at session lifecycle boundaries.
 - **PreCompact** hooks run before context compaction, useful for saving state.
 
-## Hooks in This Plugin
+## Hooks in This Setup
 
 ### PreToolUse Hooks
 
 | Hook | Matcher | Behavior | Exit Code |
 |------|---------|----------|-----------|
-| **Dev server blocker** | `Bash` | Blocks `npm run dev` etc. outside tmux — ensures log access | 2 (blocks) |
-| **Tmux reminder** | `Bash` | Suggests tmux for long-running commands (npm test, cargo build, docker) | 0 (warns) |
-| **Git push reminder** | `Bash` | Reminds to review changes before `git push` | 0 (warns) |
-| **Doc file warning** | `Write` | Warns about non-standard `.md`/`.txt` files (allows README, CLAUDE, CONTRIBUTING, CHANGELOG, LICENSE, SKILL, docs/, skills/); cross-platform path handling | 0 (warns) |
-| **Strategic compact** | `Edit\|Write` | Suggests manual `/compact` at logical intervals (every ~50 tool calls) | 0 (warns) |
-| **InsAIts security monitor (opt-in)** | `Bash\|Write\|Edit\|MultiEdit` | Optional security scan for high-signal tool inputs. Disabled unless `ECC_ENABLE_INSAITS=1`. Blocks on critical findings, warns on non-critical, and writes audit log to `.insaits_audit_session.jsonl`. Requires `pip install insa-its`. [Details](../scripts/hooks/insaits-security-monitor.py) | 2 (blocks critical) / 0 (warns) |
+| **Strategic compact** | `Edit\|Write` | Suggests manual `/compact` at logical intervals | 0 (warns) |
+| **Observe (continuous learning)** | `*` | Captures tool-use observations for continuous learning | 0 (async) |
 
 ### PostToolUse Hooks
 
 | Hook | Matcher | What It Does |
 |------|---------|-------------|
-| **PR logger** | `Bash` | Logs PR URL and review command after `gh pr create` |
-| **Build analysis** | `Bash` | Background analysis after build commands (async, non-blocking) |
-| **Quality gate** | `Edit\|Write\|MultiEdit` | Runs fast quality checks after edits |
-| **Prettier format** | `Edit` | Auto-formats JS/TS files with Prettier after edits |
-| **TypeScript check** | `Edit` | Runs `tsc --noEmit` after editing `.ts`/`.tsx` files |
-| **console.log warning** | `Edit` | Warns about `console.log` statements in edited files |
+| **Observe (continuous learning)** | `*` | Captures tool-use results for continuous learning | 0 (async) |
 
 ### Lifecycle Hooks
 
@@ -44,17 +35,16 @@ User request → Claude picks a tool → PreToolUse hook runs → Tool executes 
 |------|-------|-------------|
 | **Session start** | `SessionStart` | Loads previous context and detects package manager |
 | **Pre-compact** | `PreCompact` | Saves state before context compaction |
-| **Console.log audit** | `Stop` | Checks all modified files for `console.log` after each response |
 | **Session summary** | `Stop` | Persists session state when transcript path is available |
 | **Pattern extraction** | `Stop` | Evaluates session for extractable patterns (continuous learning) |
-| **Cost tracker** | `Stop` | Emits lightweight run-cost telemetry markers |
+| **Cost tracker** | `Stop` | Tracks lightweight session token/cost telemetry |
 | **Session end marker** | `SessionEnd` | Lifecycle marker and cleanup log |
 
 ## Customizing Hooks
 
 ### Disabling a Hook
 
-Remove or comment out the hook entry in `hooks.json`. If installed as a plugin, override in your `~/.claude/settings.json`:
+Remove or comment out the hook entry in `hooks.json`. You can also override behavior in `~/.claude/settings.json`:
 
 ```json
 {
@@ -76,10 +66,10 @@ Use environment variables to control hook behavior without editing `hooks.json`:
 
 ```bash
 # minimal | standard | strict (default: standard)
-export ECC_HOOK_PROFILE=standard
+export CUSTOM_HOOK_PROFILE=standard
 
 # Disable specific hook IDs (comma-separated)
-export ECC_DISABLED_HOOKS="pre:bash:tmux-reminder,post:edit:typecheck"
+export CUSTOM_DISABLED_HOOKS="pre:edit-write:suggest-compact,post:observe"
 ```
 
 Profiles:

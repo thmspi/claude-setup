@@ -18,7 +18,7 @@ Start a managed autonomous loop pattern with safety defaults.
 3. Enable required hooks/profile for the chosen mode.
 4. Run `/plan` first to define phases, risks, and checkpoints for the loop.
 5. Save the approved plan as a runbook under `.claude/plans/` (for example: `.claude/plans/<pattern>-loop-plan.md`).
-5. Print commands to start and monitor the loop.
+6. Print commands to start and monitor the loop.
 
 ## Required Safety Checks
 

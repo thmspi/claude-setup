@@ -4,7 +4,7 @@
  * Cross-platform (Windows, macOS, Linux) project type detection
  * by inspecting files in the working directory.
  *
- * Resolves: https://github.com/affaan-m/everything-claude-code/issues/293
+ * Resolves: prior cross-platform project detection edge case
  */
 
 const fs = require('fs');

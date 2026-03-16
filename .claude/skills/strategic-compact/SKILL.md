@@ -46,11 +46,11 @@ Add to your `~/.claude/settings.json`:
     "PreToolUse": [
       {
         "matcher": "Edit",
-        "hooks": [{ "type": "command", "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js" }]
+        "hooks": [{ "type": "command", "command": "node ~/.claude/scripts/hooks/suggest-compact.js" }]
       },
       {
         "matcher": "Write",
-        "hooks": [{ "type": "command", "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js" }]
+        "hooks": [{ "type": "command", "command": "node ~/.claude/scripts/hooks/suggest-compact.js" }]
       }
     ]
   }
@@ -83,7 +83,7 @@ Understanding what persists helps you compact with confidence:
 |----------|------|
 | CLAUDE.md instructions | Intermediate reasoning and analysis |
 | TodoWrite task list | File contents you previously read |
-| Memory files (`~/.claude/memory/`) | Multi-step conversation context |
+| Memory files (`/memories/`) | Multi-step conversation context |
 | Git state (commits, branches) | Tool call history and counts |
 | Files on disk | Nuanced user preferences stated verbally |
 
