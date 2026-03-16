@@ -1,0 +1,5 @@
+# environment variables
+.env
+
+# Source knowledge repo
+everything-claude-code
